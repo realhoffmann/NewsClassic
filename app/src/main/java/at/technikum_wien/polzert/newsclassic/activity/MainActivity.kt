@@ -15,9 +15,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.allViews
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
@@ -81,18 +83,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             prefs.registerOnSharedPreferenceChangeListener(this)
 
-
-            // Preferences DataStore variant
-            // Asynchronous access, see suspend functions
-
-            // Read, edit, update preferences
             lifecycleScope.launch {
                 applicationContext.dataStore.edit {
                     it[showImages] = true
                     val currentValue = it[showImages]
                 }
             }
-            // read
             lifecycleScope.launch {
                 val dataStorePrefs = applicationContext
                     .dataStore.data.first()
@@ -101,17 +97,29 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
     }
-
         override fun onSharedPreferenceChanged(
             sharedPreferences: SharedPreferences?,
             key: String?
         ) {
-            if (key == "sync") {
-                val syncSetting = sharedPreferences?.getBoolean(key, false)
+            if (key == "showImages") {
+                val showImages = sharedPreferences?.getBoolean(key, false)
                 Log.i(
                     logTag,
-                    "New value for sync setting is $syncSetting"
-                )
+                    "Show images: $showImages")
+
+                if(showImages == true){
+                    binding.rvList.allViews.forEach {
+                        if(it is ImageView) {
+                            it.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    binding.rvList.allViews.forEach {
+                        if(it is ImageView) {
+                            it.visibility = View.VISIBLE
+                        }
+                    }
+                }
             }
         }
 
@@ -121,22 +129,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            /*if (item.itemId == R.id.menuitem_settings) {
+            if (item.itemId == R.id.menuitem_settings) {
                 Intent(applicationContext, SettingsActivity::class.java)
                     .also { startActivity(it) }
                 return true
             }
-            return super.onOptionsItemSelected(item) */
+            if(item.itemId == R.id.btn_reload) {
+                NewsListViewModel().reload()
+                return true
+            }
+            return super.onOptionsItemSelected(item)
 
-            return when (item.itemId) {
-                R.id.menuitem_settings -> {
-                    Intent(applicationContext, SettingsActivity::class.java)
-                        .also { startActivity(it) }
-                    true
-                }
-                else -> {
-                    super.onOptionsItemSelected(item)
-                }
             }
         }
-}
+
