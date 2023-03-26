@@ -1,0 +1,33 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/messages_header">
+
+        <EditTextPreference
+            app:key="signature"
+            app:title="@string/signature_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/sync_header">
+
+        <SwitchPreferenceCompat
+            android:id="@+id/displayImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:key="displayImages"
+            app:summaryOff="@string/settings_display_img_desc_off"
+            app:summaryOn="@string/settings_display_img_desc_on"
+            app:title="@string/settings_display_img" />
+
+        <SwitchPreferenceCompat
+            android:id="@+id/downloadImages"
+            app:key="downloadImages"
+            app:summaryOff="@string/download_img_bg_desc_off"
+            app:summaryOn="@string/download_img_bg_desc_on"
+            app:title="@string/download_img_bg" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

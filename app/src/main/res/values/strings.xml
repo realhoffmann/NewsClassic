@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">HW4 Hoffmann</string>
+    <string name="reload">Reload</string>
+    <string name="an_error_occurred_please_try_again_later">An error occurred. Please try again later.</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="author">Author</string>
+    <string name="image_url">Image URL</string>
+    <string name="keywords">Keywords</string>
+    <string name="publication_date">Publication Date</string>
+    <string name="sync_header">Sync</string>
+    <string name="signature_title">News Feed URL</string>
+    <string name="messages_header">Messages</string>
+    <string name="settings_display_img">Display images</string>
+    <string name="download_img_bg">Download Images in the Background</string>
+    <string name="settings_display_img_desc_on">Images will be displayed</string>
+    <string name="settings_display_img_desc_off">Images will not be displayed</string>
+    <string name="download_img_bg_desc_on">Images will be downloaded in the background</string>
+    <string name="download_img_bg_desc_off">Images will not be downloaded in the background</string>
+</resources>
