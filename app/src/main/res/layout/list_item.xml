@@ -3,35 +3,47 @@
     xmlns:http="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="16dp"
-    android:visibility="visible"
-    http:layout_constraintBottom_toBottomOf="@+id/news_nr_id"
-    http:layout_constraintTop_toBottomOf="@+id/news_nr_id">
-
-    <TextView
-        android:id="@+id/tv_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        http:layout_constraintEnd_toEndOf="@+id/iv_item"
-        http:layout_constraintStart_toEndOf="@+id/iv_item"
-        http:layout_constraintTop_toBottomOf="@+id/iv_item"
-        tools:layout_conversion_absoluteHeight="19dp"
-        tools:layout_conversion_absoluteWidth="0dp" />
+    android:visibility="visible">
 
     <ImageView
-        android:id="@+id/iv_item"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         http:layout_constraintStart_toStartOf="parent"
         http:layout_constraintTop_toTopOf="parent"
-        tools:layout_conversion_absoluteHeight="60dp"
-        tools:layout_conversion_absoluteWidth="0dp" />
+        http:srcCompat="@drawable/ic_launcher_background" />
 
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toEndOf="@+id/item_image"
+        http:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/item_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        http:layout_constraintStart_toStartOf="@+id/item_title"
+        http:layout_constraintTop_toBottomOf="@+id/item_title" />
+
+    <TextView
+        android:id="@+id/item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        http:layout_constraintStart_toStartOf="@+id/item_author"
+        http:layout_constraintTop_toBottomOf="@+id/item_author" />
 </androidx.constraintlayout.widget.ConstraintLayout>

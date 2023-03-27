@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var binding: ActivityMainBinding
     val logTag = "MainActivity"
     val showImages = booleanPreferencesKey("showImages")
+    var url = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         binding.btnReload.setOnClickListener {
-            viewModel.reload()
+            viewModel.reload(url)
         }
 
         viewModel.error.observe(this) {
@@ -97,49 +98,41 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
     }
-        override fun onSharedPreferenceChanged(
-            sharedPreferences: SharedPreferences?,
-            key: String?
-        ) {
-            if (key == "showImages") {
-                val showImages = sharedPreferences?.getBoolean(key, false)
-                Log.i(
-                    logTag,
-                    "Show images: $showImages")
-
-                if(showImages == true){
-                    binding.rvList.allViews.forEach {
-                        if(it is ImageView) {
-                            it.visibility = View.GONE
-                        }
-                    }
-                } else {
-                    binding.rvList.allViews.forEach {
-                        if(it is ImageView) {
-                            it.visibility = View.VISIBLE
-                        }
-                    }
-                }
-            }
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences?,
+        key: String?) {
+        if(key == "newURL"){
+            val newURL = sharedPreferences?.getString(key, "")
+            Log.i(logTag, "Signature: $newURL")
+            url = newURL.toString()
+            NewsListViewModel().reload(url)
         }
 
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.menu_main, menu)
+        if (key == "showImages") {
+            val showImages = sharedPreferences?.getBoolean(key, true)
+            Log.i(logTag, "Show images: $showImages")
+            val imageAdapter = binding.rvList.adapter as ListAdapter
+            imageAdapter.showImages = showImages?: true
+            imageAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menuitem_settings) {
+            Intent(applicationContext, SettingsActivity::class.java)
+                .also { startActivity(it) }
             return true
         }
-
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            if (item.itemId == R.id.menuitem_settings) {
-                Intent(applicationContext, SettingsActivity::class.java)
-                    .also { startActivity(it) }
-                return true
-            }
-            if(item.itemId == R.id.btn_reload) {
-                NewsListViewModel().reload()
-                return true
-            }
-            return super.onOptionsItemSelected(item)
-
-            }
+        if(item.itemId == R.id.btn_reload) {
+            NewsListViewModel().reload(url)
+            return true
         }
+        return super.onOptionsItemSelected(item)
 
+    }
+}

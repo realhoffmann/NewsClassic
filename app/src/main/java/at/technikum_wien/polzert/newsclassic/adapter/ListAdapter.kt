@@ -11,6 +11,7 @@ import at.technikum_wien.polzert.newsclassic.R
 import com.bumptech.glide.Glide
 
 class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
+    var showImages: Boolean= true
     var items = items
         set(value) {
             field = value
@@ -18,24 +19,35 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
         }
     var itemClickListener : ((NewsItem)->Unit)? = null
 
+
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val itemTextView = itemView.findViewById<TextView>(R.id.tv_item)
-        private val imageView = itemView.findViewById<ImageView>(R.id.iv_item)
+        private val imageView = itemView.findViewById<ImageView>(R.id.item_image)
+        private val itemTextView = itemView.findViewById<TextView>(R.id.item_title)
+        private val authorTextView = itemView.findViewById<TextView>(R.id.item_author)
+        private val dateTextView = itemView.findViewById<TextView>(R.id.item_date)
         init {
             itemView.setOnClickListener { itemClickListener?.invoke(items[absoluteAdapterPosition]) }
         }
         fun bind(index: Int) {
             itemTextView.text = items[index].title
-            itemTextView.text = items[index].author
-            itemTextView.text = items[index].publicationDate.toString()
+            authorTextView.text = items[index].author
+            dateTextView.text = items[index].publicationDate.toString()
+
+
             Glide
                 .with(itemView.context)
                 .load(items[index].imageUrl)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(imageView)
-
+            if (showImages) {
+                imageView.visibility = View.VISIBLE
+            } else {
+                imageView.visibility = View.GONE
+            }
         }
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val context = parent.context
