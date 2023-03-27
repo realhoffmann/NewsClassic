@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import at.technikum_wien.polzert.newsclassic.data.NewsItem
 import at.technikum_wien.polzert.newsclassic.R
@@ -28,22 +29,25 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
         init {
             itemView.setOnClickListener { itemClickListener?.invoke(items[absoluteAdapterPosition]) }
         }
-        fun bind(index: Int) {
-            itemTextView.text = items[index].title
-            authorTextView.text = items[index].author
-            dateTextView.text = items[index].publicationDate.toString()
+        fun bind(index: Int, showImages: Boolean) {
+                if(index == 0) {
+                    itemView.setBackgroundColor(itemView.context.getColor(R.color.purple_200))
+                }
+                itemTextView.text = items[index].title
+                authorTextView.text = items[index].author
+                dateTextView.text = items[index].publicationDate.toString()
 
+                Glide
+                    .with(itemView.context)
+                    .load(items[index].imageUrl)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(imageView)
+                if (showImages) {
+                    imageView.visibility = View.VISIBLE
+                } else {
+                    imageView.visibility = View.GONE
+                }
 
-            Glide
-                .with(itemView.context)
-                .load(items[index].imageUrl)
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(imageView)
-            if (showImages) {
-                imageView.visibility = View.VISIBLE
-            } else {
-                imageView.visibility = View.GONE
-            }
         }
     }
 
@@ -58,7 +62,7 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(position)
+        holder.bind(position, showImages)
     }
 
     override fun getItemCount(): Int {

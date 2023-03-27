@@ -1,79 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:http="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="horizontal"
+    android:paddingTop="0dp"
+    android:paddingBottom="8dp"
+    android:visibility="visible">
+
+    <ImageView
+        android:id="@+id/imageViewDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        http:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toStartOf="parent"
+        android:scaleType="fitXY"
+        http:layout_constraintTop_toTopOf="parent"
+        http:srcCompat="@drawable/ic_launcher_background" />
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/title"
-        />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#ABC8B7E6"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintBottom_toBottomOf="@+id/imageViewDetail"
+        http:layout_constraintEnd_toEndOf="@+id/imageViewDetail"
+        http:layout_constraintStart_toStartOf="@+id/imageViewDetail"
+        http:layout_constraintTop_toTopOf="@+id/imageViewDetail" />
+
     <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
+        android:id="@+id/tvAuthor"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        />
+        android:background="#ABC8B7E6"
+        android:text="TextView"
+        http:layout_constraintEnd_toEndOf="@+id/tvTitle"
+        http:layout_constraintStart_toStartOf="@+id/tvTitle"
+        http:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+    <TextView
+        android:id="@+id/tvPublicationDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ABC8B7E6"
+        android:text="TextView"
+        http:layout_constraintEnd_toEndOf="@+id/tvAuthor"
+        http:layout_constraintStart_toStartOf="@+id/tvAuthor"
+        http:layout_constraintTop_toBottomOf="@+id/tvAuthor" />
+
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        http:layout_constraintBottom_toBottomOf="parent"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@+id/imageViewDetail">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <TextView
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/fullStoryButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
-                />
+                android:text="@string/full_article" />
+
             <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="match_parent"
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/author"
-                />
-            <TextView
-                android:id="@+id/tv_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/image_url"
-                />
-            <TextView
-                android:id="@+id/tv_image_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/publication_date"
-                />
-            <TextView
-                android:id="@+id/tv_publication_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/keywords"
-                />
-            <TextView
-                android:id="@+id/tv_keywords"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:text="TextView" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

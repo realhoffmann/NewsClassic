@@ -4,7 +4,7 @@
     <PreferenceCategory app:title="@string/messages_header">
 
         <EditTextPreference
-            app:key="signature"
+            app:key="newURL"
             app:title="@string/signature_title"
             app:useSimpleSummaryProvider="true" />
 
@@ -16,7 +16,7 @@
             android:id="@+id/displayImages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:key="displayImages"
+            app:key="showImages"
             app:summaryOff="@string/settings_display_img_desc_off"
             app:summaryOn="@string/settings_display_img_desc_on"
             app:title="@string/settings_display_img" />
