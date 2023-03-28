@@ -1,34 +1,26 @@
 package at.technikum_wien.polzert.newsclassic.activity
 
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import at.technikum_wien.polzert.newsclassic.adapter.ListAdapter
-import at.technikum_wien.polzert.newsclassic.databinding.ActivityMainBinding
-import at.technikum_wien.polzert.newsclassic.viewmodels.NewsListViewModel
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
 import androidx.activity.viewModels
-import androidx.core.view.allViews
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import at.technikum_wien.polzert.newsclassic.R
-import com.bumptech.glide.Glide
+import at.technikum_wien.polzert.newsclassic.adapter.ListAdapter
+import at.technikum_wien.polzert.newsclassic.databinding.ActivityMainBinding
+import at.technikum_wien.polzert.newsclassic.viewmodels.NewsListViewModel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 val Context.dataStore by preferencesDataStore("Settings")
@@ -74,7 +66,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.settingsButton.setOnClickListener {
             Intent(applicationContext, SettingsActivity::class.java)
-                .also { startActivity(it) }
+                .also {
+                    startActivity(it)
+                }
+        }
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
             val signature = prefs.getString("signature", "")
@@ -96,15 +91,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
                 val currentValue = dataStorePrefs[showImages]
             }
-        }
     }
-    override fun onSharedPreferenceChanged(
-        sharedPreferences: SharedPreferences?,
-        key: String?) {
-        if(key == "newURL"){
-            val newURL = sharedPreferences?.getString(key, "")
-            Log.i(logTag, "Signature: $newURL")
-            url = newURL.toString()
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if(key == "signature"){
+            val signature = sharedPreferences?.getString(key, "")
+            Log.i(logTag, "Signature: $signature")
+            url = signature.toString()
             NewsListViewModel().reload(url)
         }
 
