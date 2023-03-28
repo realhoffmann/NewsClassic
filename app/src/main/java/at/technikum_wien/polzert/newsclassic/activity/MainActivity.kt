@@ -94,10 +94,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if(key == "signature"){
+            val viewModel by viewModels<NewsListViewModel>()
             val signature = sharedPreferences?.getString(key, "")
             Log.i(logTag, "Signature: $signature")
             url = signature.toString()
             NewsListViewModel().reload(url)
+            viewModel.reload(url)
+
+
         }
 
         if (key == "showImages") {
