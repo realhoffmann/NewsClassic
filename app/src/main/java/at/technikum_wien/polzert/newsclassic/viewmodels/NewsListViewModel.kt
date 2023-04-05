@@ -1,16 +1,18 @@
 package at.technikum_wien.polzert.newsclassic.viewmodels
 
+import android.app.Application
 import androidx.lifecycle.*
 import at.technikum_wien.polzert.newsclassic.activity.MainActivity
 import at.technikum_wien.polzert.newsclassic.data.download.NewsDownloader
 import at.technikum_wien.polzert.newsclassic.data.NewsItem
+import at.technikum_wien.polzert.newsclassic.data.download.NewsItemRepository
 import kotlinx.coroutines.launch
 
-class NewsListViewModel() : ViewModel() {
-    private val _newsItems = MutableLiveData(listOf<NewsItem>())
+class NewsListViewModel(val newsItemRepository: NewsItemRepository) : ViewModel() {
+
     private val _error = MutableLiveData(false)
     private val _busy = MutableLiveData(true)
-
+    val newsItems = newsItemRepository.newsItems
     private var count = 0
     var url = ""
 
@@ -18,8 +20,6 @@ class NewsListViewModel() : ViewModel() {
         reload(url)
     }
 
-    val newsItems : LiveData<List<NewsItem>>
-        get() = _newsItems
     val error : LiveData<Boolean>
         get() = _error
     val busy : LiveData<Boolean>
@@ -27,15 +27,14 @@ class NewsListViewModel() : ViewModel() {
 
     private fun downloadNewsItems(newsFeedUrl: String) {
         _error.value = false
-        _newsItems.value = listOf()
         _busy.value = true
         viewModelScope.launch {
-            val value = NewsDownloader().load(newsFeedUrl)
-            if (value == null)
+            val value = newsItemRepository.loadNewsItems(newsFeedUrl, true)
+            if (value) {
                 _error.value = true
-            else
-                _newsItems.value = value
-            _busy.value = false
+            } else {
+                _busy.value = false
+            }
         }
     }
 

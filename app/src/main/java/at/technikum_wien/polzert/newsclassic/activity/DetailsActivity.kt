@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import at.technikum_wien.polzert.newsclassic.R
@@ -18,6 +19,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityDetailsBinding
+    var showImages: Boolean= true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +28,14 @@ class DetailsActivity : AppCompatActivity() {
         val item = intent?.extras?.getSerializable(ITEM_KEY) as? NewsItem
         if (item != null) {
 
-            binding.imageViewDetail.load(item.imageUrl)
+            if (showImages) {
+                binding.imageViewDetail.load(item.imageUrl)
+            }
             binding.tvTitle.text = item.title
             binding.tvAuthor.text = item.author
             binding.tvPublicationDate.text = item.publicationDate.toString()
             binding.tvDescription.text = Html.fromHtml(item.description, Html.FROM_HTML_MODE_COMPACT)
+
         }
 
         val fullStory = findViewById<TextView>(R.id.fullStoryButton)

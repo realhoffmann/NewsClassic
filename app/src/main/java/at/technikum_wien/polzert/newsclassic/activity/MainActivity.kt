@@ -18,6 +18,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import at.technikum_wien.polzert.newsclassic.R
 import at.technikum_wien.polzert.newsclassic.adapter.ListAdapter
+import at.technikum_wien.polzert.newsclassic.data.download.NewsItemRepository
 import at.technikum_wien.polzert.newsclassic.databinding.ActivityMainBinding
 import at.technikum_wien.polzert.newsclassic.viewmodels.NewsListViewModel
 import kotlinx.coroutines.flow.first
@@ -98,10 +99,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             val signature = sharedPreferences?.getString(key, "")
             Log.i(logTag, "Signature: $signature")
             url = signature.toString()
-            NewsListViewModel().reload(url)
             viewModel.reload(url)
-
-
         }
 
         if (key == "showImages") {
@@ -125,7 +123,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             return true
         }
         if(item.itemId == R.id.btn_reload) {
-            NewsListViewModel().reload(url)
+            val viewModel by viewModels<NewsListViewModel>()
+            viewModel.reload(url)
             return true
         }
         return super.onOptionsItemSelected(item)

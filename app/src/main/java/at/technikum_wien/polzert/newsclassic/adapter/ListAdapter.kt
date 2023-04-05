@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import at.technikum_wien.polzert.newsclassic.data.NewsItem
 import at.technikum_wien.polzert.newsclassic.R
+import at.technikum_wien.polzert.newsclassic.data.download.ImageDownloader
 import com.bumptech.glide.Glide
 
 class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
@@ -36,6 +37,8 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
                 itemTextView.text = items[index].title
                 authorTextView.text = items[index].author
                 dateTextView.text = items[index].publicationDate.toString()
+
+
 
                 Glide
                     .with(itemView.context)
