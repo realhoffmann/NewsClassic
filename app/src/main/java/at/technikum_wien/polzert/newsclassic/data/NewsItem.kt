@@ -5,9 +5,10 @@ import java.io.Serializable
 import java.util.*
 
 
-@Entity(tableName = "news_item", primaryKeys = ["identifier"])
+@Entity(tableName = "news_item", indices = [Index(value = ["identifier"], unique = true)])
 @TypeConverters(StringListConverter::class)
 data class NewsItem(
+    @PrimaryKey
     @ColumnInfo(name = "identifier")
     var identifier: String,
     @ColumnInfo(name = "title")
@@ -25,3 +26,4 @@ data class NewsItem(
     @ColumnInfo(name = "keywords")
     var keywords: Set<String> = emptySet()
 ): Serializable
+

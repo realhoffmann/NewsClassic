@@ -11,6 +11,11 @@ import at.technikum_wien.polzert.newsclassic.R
 import com.bumptech.glide.Glide
 
 class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
+
+   companion object {
+       private const val TYPE_TOP = 0
+       private const val TYPE_OTHERS = 1
+    }
     var showImages: Boolean= true
     var items = items
         set(value) {
@@ -29,14 +34,9 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
             itemView.setOnClickListener { itemClickListener?.invoke(items[absoluteAdapterPosition]) }
         }
         fun bind(index: Int, showImages: Boolean) {
-                if(index == 0) {
-                    itemView.setBackgroundColor(itemView.context.getColor(R.color.purple_200))
-                }
                 itemTextView.text = items[index].title
                 authorTextView.text = items[index].author
                 dateTextView.text = items[index].publicationDate.toString()
-
-
 
                 Glide
                     .with(itemView.context)
@@ -54,11 +54,22 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) {
+            TYPE_TOP
+        } else {
+            TYPE_OTHERS
+        }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val context = parent.context
-        val layoutIdForListItem: Int = R.layout.list_item
+        val layoutIdForListItem: Int = if (viewType == TYPE_TOP) {
+            R.layout.list_item_first
+        } else {
+            R.layout.list_item
+        }
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(layoutIdForListItem, parent, false)
         return ItemViewHolder(view)

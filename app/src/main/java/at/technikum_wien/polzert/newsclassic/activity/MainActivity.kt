@@ -138,7 +138,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             return true
         }
         if(item.itemId == R.id.btn_reload) {
-            val viewModel by viewModels<NewsListViewModel>()
             viewModel.reload(url)
             return true
         }
