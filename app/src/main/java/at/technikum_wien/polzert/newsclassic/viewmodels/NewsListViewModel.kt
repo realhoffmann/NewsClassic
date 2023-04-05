@@ -2,13 +2,11 @@ package at.technikum_wien.polzert.newsclassic.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
-import at.technikum_wien.polzert.newsclassic.activity.MainActivity
-import at.technikum_wien.polzert.newsclassic.data.download.NewsDownloader
-import at.technikum_wien.polzert.newsclassic.data.NewsItem
+import at.technikum_wien.polzert.newsclassic.NewsItemApplication
 import at.technikum_wien.polzert.newsclassic.data.download.NewsItemRepository
 import kotlinx.coroutines.launch
 
-class NewsListViewModel(val newsItemRepository: NewsItemRepository) : ViewModel() {
+class NewsListViewModel(application: Application, val newsItemRepository: NewsItemRepository) : AndroidViewModel(application) {
 
     private val _error = MutableLiveData(false)
     private val _busy = MutableLiveData(true)
@@ -20,9 +18,9 @@ class NewsListViewModel(val newsItemRepository: NewsItemRepository) : ViewModel(
         reload(url)
     }
 
-    val error : LiveData<Boolean>
+    val error: LiveData<Boolean>
         get() = _error
-    val busy : LiveData<Boolean>
+    val busy: LiveData<Boolean>
         get() = _busy
 
     private fun downloadNewsItems(newsFeedUrl: String) {
@@ -39,9 +37,9 @@ class NewsListViewModel(val newsItemRepository: NewsItemRepository) : ViewModel(
     }
 
     fun reload(url: String) {
-        if(url != ""){
+        if (url != "") {
             downloadNewsItems(url)
-        }else {
+        } else {
 
             if (count % 2 == 0) {
                 downloadNewsItems("https://www.engadget.com/rss.xml")
@@ -51,4 +49,17 @@ class NewsListViewModel(val newsItemRepository: NewsItemRepository) : ViewModel(
             count++
         }
     }
+}
+
+    class NewsItemViewModelFactory(
+        private val newsItemRepository: NewsItemRepository,
+        private val application: NewsItemApplication) :
+        ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(NewsListViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return NewsListViewModel(application, newsItemRepository) as T
+            }
+            throw IllegalArgumentException("Invalid viewModel class")
+        }
 }

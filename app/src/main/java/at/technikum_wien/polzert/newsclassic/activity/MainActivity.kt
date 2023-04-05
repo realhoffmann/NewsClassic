@@ -16,10 +16,13 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import at.technikum_wien.polzert.newsclassic.NewsItemApplication
 import at.technikum_wien.polzert.newsclassic.R
 import at.technikum_wien.polzert.newsclassic.adapter.ListAdapter
+import at.technikum_wien.polzert.newsclassic.data.download.NewsDownloader
 import at.technikum_wien.polzert.newsclassic.data.download.NewsItemRepository
 import at.technikum_wien.polzert.newsclassic.databinding.ActivityMainBinding
+import at.technikum_wien.polzert.newsclassic.viewmodels.NewsItemViewModelFactory
 import at.technikum_wien.polzert.newsclassic.viewmodels.NewsListViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -33,11 +36,23 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     val showImages = booleanPreferencesKey("showImages")
     var url = ""
 
+    val viewModel: NewsListViewModel by viewModels(
+        factoryProducer = {
+            val application = applicationContext as NewsItemApplication
+            NewsItemViewModelFactory(newsItemRepository(application), application)
+        }
+    )
+    private fun newsItemRepository(application: NewsItemApplication): NewsItemRepository {
+        val dao = application.appRoomDatabase.newsItemDao()
+        val downloader = NewsDownloader()
+        return NewsItemRepository(dao, downloader)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val viewModel by viewModels<NewsListViewModel>()
+
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvList.layoutManager = layoutManager
@@ -95,7 +110,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if(key == "signature"){
-            val viewModel by viewModels<NewsListViewModel>()
             val signature = sharedPreferences?.getString(key, "")
             Log.i(logTag, "Signature: $signature")
             url = signature.toString()
