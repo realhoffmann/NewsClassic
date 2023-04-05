@@ -53,7 +53,7 @@ class NewsListViewModel(application: Application, val newsItemRepository: NewsIt
 
     class NewsItemViewModelFactory(
         private val newsItemRepository: NewsItemRepository,
-        private val application: NewsItemApplication) :
+        private val application: Application) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NewsListViewModel::class.java)) {
@@ -63,3 +63,4 @@ class NewsListViewModel(application: Application, val newsItemRepository: NewsIt
             throw IllegalArgumentException("Invalid viewModel class")
         }
 }
+
