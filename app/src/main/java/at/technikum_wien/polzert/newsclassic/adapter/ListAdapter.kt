@@ -25,6 +25,7 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
     var itemClickListener : ((NewsItem)->Unit)? = null
 
 
+
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView = itemView.findViewById<ImageView>(R.id.item_image)
         private val itemTextView = itemView.findViewById<TextView>(R.id.item_title)
@@ -33,6 +34,7 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
         init {
             itemView.setOnClickListener { itemClickListener?.invoke(items[absoluteAdapterPosition]) }
         }
+
         fun bind(index: Int, showImages: Boolean) {
                 itemTextView.text = items[index].title
                 authorTextView.text = items[index].author
@@ -43,6 +45,7 @@ class ListAdapter(items: List<NewsItem> = listOf()) : RecyclerView.Adapter<ListA
                     .load(items[index].imageUrl)
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(imageView)
+
                 if (showImages) {
                     imageView.visibility = View.VISIBLE
                 } else {

@@ -32,16 +32,19 @@ val Context.dataStore by preferencesDataStore("Settings")
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var binding: ActivityMainBinding
-    val logTag = "MainActivity"
-    val showImages = booleanPreferencesKey("showImages")
+    private val logTag = "MainActivity"
+    private val showImages = booleanPreferencesKey("showImages")
     var url = ""
 
-    val viewModel: NewsListViewModel by viewModels(
+    // initialize viewModel with factory
+    private val viewModel: NewsListViewModel by viewModels(
         factoryProducer = {
             val application = applicationContext as NewsItemApplication
             NewsItemViewModelFactory(newsItemRepository(application), application)
         }
     )
+
+    // create newsItemRepository instance with NewsDownloader and Dao
     private fun newsItemRepository(application: NewsItemApplication): NewsItemRepository {
         val dao = application.appRoomDatabase.newsItemDao()
         val downloader = NewsDownloader()
@@ -49,26 +52,30 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         val layoutManager = LinearLayoutManager(this)
         binding.rvList.layoutManager = layoutManager
         val adapter = ListAdapter()
         binding.rvList.adapter = adapter
+
+        // item click listener to start DetailsActivity
         adapter.itemClickListener = {
             val intent = Intent(this, DetailsActivity::class.java)
             intent.putExtra(DetailsActivity.ITEM_KEY, it)
             startActivity(intent)
         }
 
+        //reload button
         binding.btnReload.setOnClickListener {
             viewModel.reload(url)
         }
 
+        //show or hide the error text
         viewModel.error.observe(this) {
             binding.tvError.visibility = if (it) View.VISIBLE else View.GONE
         }
@@ -77,17 +84,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             adapter.items = it
         }
 
+        //show/hide reload button
         viewModel.busy.observe(this) {
             binding.btnReload.isEnabled = !it
         }
 
-        binding.settingsButton.setOnClickListener {
-            Intent(applicationContext, SettingsActivity::class.java)
-                .also {
-                    startActivity(it)
-                }
-        }
-
+        // setting preferences
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
             val signature = prefs.getString("signature", "")
             if (signature != null) {
@@ -110,13 +112,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
     }
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        // set different URL
         if(key == "signature"){
             val signature = sharedPreferences?.getString(key, "")
             Log.i(logTag, "Signature: $signature")
             url = signature.toString()
             viewModel.reload(url)
         }
-
+        // show/hide images
         if (key == "showImages") {
             val showImages = sharedPreferences?.getBoolean(key, true)
             Log.i(logTag, "Show images: $showImages")
@@ -132,11 +135,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        // open settings activity
         if (item.itemId == R.id.menuitem_settings) {
             Intent(applicationContext, SettingsActivity::class.java)
                 .also { startActivity(it) }
             return true
         }
+
+        // reload news
         if(item.itemId == R.id.btn_reload) {
             viewModel.reload(url)
             return true

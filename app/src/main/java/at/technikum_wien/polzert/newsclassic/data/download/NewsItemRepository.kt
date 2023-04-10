@@ -6,7 +6,7 @@ class NewsItemRepository (private val newsItemDao: NewsItemDao,
                           private val newsDownloader: NewsDownloader) {
     private val logTag = "NewsItemRepository"
 
-    val newsItems by lazy { newsItemDao.fetchAllNewsItems() }
+    val newsItems by lazy { newsItemDao.orderNewsItems() }
 
     suspend fun loadNewsItems(newsFeedUrl: String, deleteOldItems: Boolean): Boolean {
         val value = newsDownloader.load(newsFeedUrl)

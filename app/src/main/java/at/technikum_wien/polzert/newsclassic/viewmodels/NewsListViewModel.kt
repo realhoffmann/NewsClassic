@@ -6,7 +6,7 @@ import at.technikum_wien.polzert.newsclassic.NewsItemApplication
 import at.technikum_wien.polzert.newsclassic.data.download.NewsItemRepository
 import kotlinx.coroutines.launch
 
-class NewsListViewModel(application: Application, val newsItemRepository: NewsItemRepository) : AndroidViewModel(application) {
+    class NewsListViewModel(application: Application, private val newsItemRepository: NewsItemRepository) : AndroidViewModel(application) {
 
     private val _error = MutableLiveData(false)
     private val _busy = MutableLiveData(true)

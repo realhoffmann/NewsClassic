@@ -21,6 +21,7 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailsBinding
     var showImages: Boolean= true
 
+    // create view and show data
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
@@ -28,6 +29,7 @@ class DetailsActivity : AppCompatActivity() {
         val item = intent?.extras?.getSerializable(ITEM_KEY) as? NewsItem
         if (item != null) {
 
+            // show/hide image
             if (showImages) {
                 binding.imageViewDetail.load(item.imageUrl)
             }
@@ -38,6 +40,7 @@ class DetailsActivity : AppCompatActivity() {
 
         }
 
+        // Full Story Button -> opens link in browser
         val fullStory = findViewById<TextView>(R.id.fullStoryButton)
         fullStory.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item?.link))
@@ -45,7 +48,7 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 }
-
+//load image with Glide
 private fun ImageView.load(imageUrl: String?) {
     if (imageUrl != null) {
         Glide.with(this)
