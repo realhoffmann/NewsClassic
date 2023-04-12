@@ -17,6 +17,7 @@ interface NewsItemDao {
         @Query("SELECT * FROM news_item ORDER BY publicationDate DESC")
         fun orderNewsItems(): LiveData<List<NewsItem>>
 
+
         //Deletes all Items
         @Query("DELETE FROM news_item")
         suspend fun deleteAllNewsItems()

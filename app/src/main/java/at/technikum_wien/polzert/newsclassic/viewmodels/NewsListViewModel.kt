@@ -2,11 +2,19 @@ package at.technikum_wien.polzert.newsclassic.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import at.technikum_wien.polzert.newsclassic.NewsItemApplication
 import at.technikum_wien.polzert.newsclassic.data.download.NewsItemRepository
+import at.technikum_wien.polzert.newsclassic.worker.DownloadWorker
 import kotlinx.coroutines.launch
 
-    class NewsListViewModel(application: Application, private val newsItemRepository: NewsItemRepository) : AndroidViewModel(application) {
+    class NewsListViewModel(val workManager: WorkManager,
+                            application: Application,
+                            private val newsItemRepository: NewsItemRepository) :
+                            AndroidViewModel(application) {
 
     private val _error = MutableLiveData(false)
     private val _busy = MutableLiveData(true)
@@ -24,6 +32,7 @@ import kotlinx.coroutines.launch
         get() = _busy
 
     private fun downloadNewsItems(newsFeedUrl: String) {
+        scheduleBackgroundWork()
         _error.value = false
         _busy.value = true
         viewModelScope.launch {
@@ -36,7 +45,17 @@ import kotlinx.coroutines.launch
         }
     }
 
-    fun reload(url: String) {
+        private fun scheduleBackgroundWork() {
+            val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
+                .setConstraints(Constraints(
+                    requiredNetworkType = NetworkType.CONNECTED,
+                    requiresBatteryNotLow = true
+                ))
+                .build()
+            workManager.enqueue(workRequest)
+        }
+
+        fun reload(url: String) {
         if (url != "") {
             downloadNewsItems(url)
         } else {
@@ -52,13 +71,14 @@ import kotlinx.coroutines.launch
 }
 
     class NewsItemViewModelFactory(
+        private val workManager: WorkManager,
         private val newsItemRepository: NewsItemRepository,
         private val application: Application) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NewsListViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return NewsListViewModel(application, newsItemRepository) as T
+                return NewsListViewModel(workManager, application, newsItemRepository) as T
             }
             throw IllegalArgumentException("Invalid viewModel class")
         }

@@ -16,6 +16,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkManager
 import at.technikum_wien.polzert.newsclassic.NewsItemApplication
 import at.technikum_wien.polzert.newsclassic.R
 import at.technikum_wien.polzert.newsclassic.adapter.ListAdapter
@@ -40,7 +41,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private val viewModel: NewsListViewModel by viewModels(
         factoryProducer = {
             val application = applicationContext as NewsItemApplication
-            NewsItemViewModelFactory(newsItemRepository(application), application)
+            NewsItemViewModelFactory(
+                WorkManager.getInstance(applicationContext),
+                newsItemRepository(application), application)
         }
     )
 
